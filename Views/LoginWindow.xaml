@@ -6,7 +6,16 @@
         xmlns:local="clr-namespace:StoreManagementSystem.Views"
         mc:Ignorable="d"
         Title="LoginWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Background="#F5F5F5">
+        <Border Width="350" Height="300" Background="White" CornerRadius="10" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Store Management System" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Username"/>
+                <TextBox x:Name="UsernameTextBox" Height="35" Margin="0,5,0,15"/>
+                <TextBlock Text="Password"/>
+                <PasswordBox x:Name="PasswordBox" Height="35" Margin="0,5,0,20"/>
+                <Button Content="Login" Height="40" FontSize="16" Background="#0078D7" Foreground="White" Click="LoginButton_Click"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

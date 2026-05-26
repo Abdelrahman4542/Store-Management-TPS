@@ -1,25 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using StoreManagementSystem.Services;
 
 namespace StoreManagementSystem.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+        LoadCurrentUser();
+            ApplyRolePermissions();
+        }
+
+        private void LoadCurrentUser()
+        {
+            if (CurrentUserService.CurrentUser != null)
+            {
+                WelcomeText.Text =
+                    $"Hello, {CurrentUserService.CurrentUser.FullName}...";
+            }
+        }
+
+        private void ApplyRolePermissions()
+        {
+            if (CurrentUserService.CurrentUser == null)
+                return;
+
+            string? role = CurrentUserService.CurrentUser.Role;
+
+            // ================= CASHIER =================
+            if (role == "Cashier")
+            {
+                // يخفي إدارة المخزون
+                InventoryButton.Visibility = Visibility.Collapsed;
+
+                // Products تتحول إلى POS
+                ProductsButton.Content = "Point Of Sale";
+
+                // يخفي Revenue و Growth
+                RevenueSection.Visibility = Visibility.Collapsed;
+
+                // يخفي الشارتات
+                SalesChartSection.Visibility = Visibility.Collapsed;
+
+                // يخفي Analytics
+                AnalyticsSection.Visibility = Visibility.Collapsed;
+            }
+
+            // ================= ADMIN =================
+            // Admin يشوف كل حاجة
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentUserService.CurrentUser = null;
+
+            LoginWindow loginWindow = new LoginWindow();
+
+            loginWindow.Show();
+
+            this.Close();
         }
     }
+
+
 }

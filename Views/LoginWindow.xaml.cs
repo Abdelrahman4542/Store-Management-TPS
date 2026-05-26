@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using StoreManagementSystem.Models;
 using StoreManagementSystem.Services;
 
 namespace StoreManagementSystem.Views
@@ -8,17 +9,37 @@ namespace StoreManagementSystem.Views
         public LoginWindow()
         {
             InitializeComponent();
+        }
 
-        AuthService authService = new AuthService();
 
-            bool isConnected = authService.TestConnection();
+    private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameTextBox.Text;
+            string password = PasswordBox.Password;
 
-            MessageBox.Show(
-                isConnected
-                ? "Database Connected Successfully"
-                : "Database Connection Failed"
-            );
+            AuthService authService = new AuthService();
+
+            User? loggedInUser = authService.Login(username, password);
+
+            if (loggedInUser != null)
+            {
+                CurrentUserService.CurrentUser = loggedInUser;
+
+                MessageBox.Show(
+                    $"Welcome {loggedInUser.FullName}\nRole: {loggedInUser.Role}"
+                );
+
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid Username or Password");
+            }
         }
     }
+
 
 }
