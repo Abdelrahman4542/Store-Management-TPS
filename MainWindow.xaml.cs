@@ -32,27 +32,58 @@ namespace StoreManagementSystem.Views
             string? role = CurrentUserService.CurrentUser.Role;
 
             // ================= CASHIER =================
+
             if (role == "Cashier")
             {
-                // يخفي إدارة المخزون
                 InventoryButton.Visibility = Visibility.Collapsed;
 
-                // Products تتحول إلى POS
                 ProductsButton.Content = "Point Of Sale";
 
-                // يخفي Revenue و Growth
                 RevenueSection.Visibility = Visibility.Collapsed;
 
-                // يخفي الشارتات
                 SalesChartSection.Visibility = Visibility.Collapsed;
 
-                // يخفي Analytics
                 AnalyticsSection.Visibility = Visibility.Collapsed;
             }
 
             // ================= ADMIN =================
             // Admin يشوف كل حاجة
         }
+
+        private void InventoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Visibility = Visibility.Visible;
+
+            DashboardContent.Visibility = Visibility.Collapsed;
+
+            MainContent.Content = new InventoryView();
+        }
+
+        private void ProductsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Visibility = Visibility.Visible;
+
+            DashboardContent.Visibility = Visibility.Collapsed;
+
+            MainContent.Content = new ProductsView();
+        }
+
+        private void POSBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Visibility = Visibility.Visible;
+
+            DashboardContent.Visibility = Visibility.Collapsed;
+
+            MainContent.Content = new POSView();
+        }
+        private void DashboardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Visibility = Visibility.Collapsed;
+
+          DashboardContent.Visibility = Visibility.Visible;
+
+
+}
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
@@ -65,6 +96,5 @@ namespace StoreManagementSystem.Views
             this.Close();
         }
     }
-
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using StoreManagementSystem.ViewModels;
 
 namespace StoreManagementSystem.Views
 {
@@ -7,6 +8,11 @@ namespace StoreManagementSystem.Views
         public InventoryView()
         {
             InitializeComponent();
+
+
+        DataContext = new ProductViewModel();
         }
     }
+
+
 }

@@ -8,7 +8,6 @@
      WindowStartupLocation="CenterScreen"
      Background="#EEF2F7">
 
-
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -24,24 +23,33 @@
 
                 <TextBlock Text="Dashboard"
                        Foreground="White"
-                       FontSize="18"
+                       FontSize="20"
                        FontWeight="Bold"
                        Margin="20"/>
 
                 <Button x:Name="DashboardButton"
                     Content="Dashboard"
                     Margin="10"
-                    Height="40"/>
+                    Height="40"
+                    Click="DashboardBtn_Click"/>
 
                 <Button x:Name="InventoryButton"
                     Content="Inventory"
                     Margin="10"
-                    Height="40"/>
+                    Height="40"
+                    Click="InventoryBtn_Click"/>
 
                 <Button x:Name="ProductsButton"
                     Content="Products"
                     Margin="10"
-                    Height="40"/>
+                    Height="40"
+                    Click="ProductsBtn_Click"/>
+
+                <Button x:Name="POSButton"
+                    Content="POS"
+                    Margin="10"
+                    Height="40"
+                    Click="POSBtn_Click"/>
 
                 <Button x:Name="TransactionsButton"
                     Content="Transactions History"
@@ -60,202 +68,163 @@
 
         <!-- ================= MAIN CONTENT ================= -->
 
-        <ScrollViewer Grid.Column="1"
-                  VerticalScrollBarVisibility="Auto">
+        <Grid Grid.Column="1">
 
-            <Grid Margin="20">
+            <!-- DASHBOARD -->
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="120"/>
-                    <RowDefinition Height="120"/>
-                    <RowDefinition Height="250"/>
-                    <RowDefinition Height="250"/>
-                </Grid.RowDefinitions>
+            <ScrollViewer x:Name="DashboardContent"
+                      VerticalScrollBarVisibility="Auto">
 
-                <!-- ================= HEADER ================= -->
+                <Grid Margin="20">
 
-                <Border Background="White"
-                    CornerRadius="12"
-                    Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="120"/>
+                        <RowDefinition Height="120"/>
+                        <RowDefinition Height="250"/>
+                        <RowDefinition Height="250"/>
+                    </Grid.RowDefinitions>
 
-                    <DockPanel>
-
-                        <TextBlock x:Name="WelcomeText"
-                               DockPanel.Dock="Right"
-                               VerticalAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="20"
-                               Foreground="Black"/>
-
-                    </DockPanel>
-
-                </Border>
-
-                <!-- ================= KPI ROW 1 ================= -->
-
-                <UniformGrid Grid.Row="1"
-                         Columns="3"
-                         Margin="0,15,0,0">
-
-                    <!-- Total Products -->
+                    <!-- HEADER -->
 
                     <Border Background="White"
                         CornerRadius="12"
-                        Margin="10"
-                        Padding="15">
+                        Padding="10">
 
-                        <StackPanel>
+                        <DockPanel>
 
-                            <TextBlock Text="Top Selling Products"
-                                   Foreground="Gray"/>
+                            <TextBlock x:Name="WelcomeText"
+                                   DockPanel.Dock="Right"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="Black"/>
 
-                            <TextBlock x:Name="ProductsCountText"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
-
-                        </StackPanel>
-
-                    </Border>
-
-                    <!-- Low Stock -->
-
-                    <Border Background="White"
-                        CornerRadius="12"
-                        Margin="10"
-                        Padding="15">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Low Stock"
-                                   Foreground="Gray"/>
-
-                            <TextBlock Text="45"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
-
-                        </StackPanel>
+                        </DockPanel>
 
                     </Border>
 
-                    <!-- Today Sales -->
+                    <!-- KPI ROW 1 -->
 
-                    <Border Background="White"
-                        CornerRadius="12"
-                        Margin="10"
-                        Padding="15">
+                    <UniformGrid Grid.Row="1"
+                             Columns="3"
+                             Margin="0,15,0,0">
 
-                        <StackPanel>
-
-                            <TextBlock Text="Today Sales"
-                                   Foreground="Gray"/>
-
-                            <TextBlock Text="210"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
-
-                        </StackPanel>
-
-                    </Border>
-
-                </UniformGrid>
-
-                <!-- ================= KPI ROW 2 ================= -->
-
-                <UniformGrid x:Name="RevenueSection"
-                         Grid.Row="2"
-                         Columns="2"
-                         Margin="0,10,0,0">
-
-                    <!-- Revenue -->
-
-                    <Border Background="White"
-                        CornerRadius="12"
-                        Margin="10"
-                        Padding="15">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Revenue"
-                                   Foreground="Gray"/>
-
-                            <TextBlock Text="$105,315"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
-
-                        </StackPanel>
-
-                    </Border>
-
-                    <!-- Growth -->
-
-                    <Border Background="White"
-                        CornerRadius="12"
-                        Margin="10"
-                        Padding="15">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Growth"
-                                   Foreground="Gray"/>
-
-                            <TextBlock Text="+12.5%"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
-
-                        </StackPanel>
-
-                    </Border>
-
-                </UniformGrid>
-
-                <!-- ================= SALES TREND ================= -->
-
-                <Border x:Name="SalesChartSection"
-                    Grid.Row="3"
-                    Background="White"
-                    CornerRadius="12"
-                    Margin="10"
-                    Padding="15">
-
-                    <Border Background="#F8FAFC"
-                        CornerRadius="10"
-                        Margin="10">
-
-                        <TextBlock Text="Sales Trend Chart"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="Gray"
-                               FontSize="16"/>
-
-                    </Border>
-
-                </Border>
-
-                <!-- ================= CATEGORY + INVENTORY ================= -->
-
-                <Border x:Name="AnalyticsSection"
-                    Grid.Row="4"
-                    Background="White"
-                    CornerRadius="12"
-                    Margin="10"
-                    Padding="15">
-
-                    <Grid>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Category Sales -->
-
-                        <Border Grid.Column="0"
+                        <Border Background="White"
+                            CornerRadius="12"
                             Margin="10"
-                            CornerRadius="10"
-                            Background="#F8FAFC">
+                            Padding="15">
 
-                            <TextBlock Text="Category Sales"
+                            <StackPanel>
+
+                                <TextBlock Text="Top Selling Products"
+                                       Foreground="Gray"/>
+
+                                <TextBlock x:Name="ProductsCountText"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <Border Background="White"
+                            CornerRadius="12"
+                            Margin="10"
+                            Padding="15">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Low Stock"
+                                       Foreground="Gray"/>
+
+                                <TextBlock Text="45"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <Border Background="White"
+                            CornerRadius="12"
+                            Margin="10"
+                            Padding="15">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Today Sales"
+                                       Foreground="Gray"/>
+
+                                <TextBlock Text="210"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </UniformGrid>
+
+                    <!-- KPI ROW 2 -->
+
+                    <UniformGrid x:Name="RevenueSection"
+                             Grid.Row="2"
+                             Columns="2"
+                             Margin="0,10,0,0">
+
+                        <Border Background="White"
+                            CornerRadius="12"
+                            Margin="10"
+                            Padding="15">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Revenue"
+                                       Foreground="Gray"/>
+
+                                <TextBlock Text="$105,315"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <Border Background="White"
+                            CornerRadius="12"
+                            Margin="10"
+                            Padding="15">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Growth"
+                                       Foreground="Gray"/>
+
+                                <TextBlock Text="+12.5%"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </UniformGrid>
+
+                    <!-- SALES CHART -->
+
+                    <Border x:Name="SalesChartSection"
+                        Grid.Row="3"
+                        Background="White"
+                        CornerRadius="12"
+                        Margin="10"
+                        Padding="15">
+
+                        <Border Background="#F8FAFC"
+                            CornerRadius="10"
+                            Margin="10">
+
+                            <TextBlock Text="Sales Trend Chart"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Foreground="Gray"
@@ -263,30 +232,65 @@
 
                         </Border>
 
-                        <!-- Inventory Distribution -->
+                    </Border>
 
-                        <Border Grid.Column="1"
-                            Margin="10"
-                            CornerRadius="10"
-                            Background="#F8FAFC">
+                    <!-- ANALYTICS -->
 
-                            <TextBlock Text="Inventory Distribution"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Foreground="Gray"
-                                   FontSize="16"/>
+                    <Border x:Name="AnalyticsSection"
+                        Grid.Row="4"
+                        Background="White"
+                        CornerRadius="12"
+                        Margin="10"
+                        Padding="15">
 
-                        </Border>
+                        <Grid>
 
-                    </Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                </Border>
+                            <Border Grid.Column="0"
+                                Margin="10"
+                                CornerRadius="10"
+                                Background="#F8FAFC">
 
-            </Grid>
+                                <TextBlock Text="Category Sales"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="Gray"
+                                       FontSize="16"/>
 
-        </ScrollViewer>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                Margin="10"
+                                CornerRadius="10"
+                                Background="#F8FAFC">
+
+                                <TextBlock Text="Inventory Distribution"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="Gray"
+                                       FontSize="16"/>
+
+                            </Border>
+
+                        </Grid>
+
+                    </Border>
+
+                </Grid>
+
+            </ScrollViewer>
+
+            <!-- VIEWS -->
+
+            <ContentControl x:Name="MainContent"
+                        Visibility="Collapsed"/>
+
+        </Grid>
 
     </Grid>
-
 
 </Window>

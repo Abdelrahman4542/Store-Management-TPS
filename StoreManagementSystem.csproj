@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Repositories\" />
     <Folder Include="Resources\" />
   </ItemGroup>
