@@ -9,33 +9,38 @@ using System.Windows.Input;
 
 namespace StoreManagementSystem.ViewModels
 {
-    public class ProductViewModel : BaseViewModel
+    public class POSViewModel : BaseViewModel
     {
         // =========================
         // REPOSITORIES
         // =========================
 
-        private readonly ProductRepository _productRepository;
+        private readonly ProductRepository
+            _productRepository;
 
-        private readonly TransactionRepository _transactionRepository;
+        private readonly TransactionRepository
+            _transactionRepository;
 
         // =========================
         // COLLECTIONS
         // =========================
 
-        public ObservableCollection<Product> Products
+        public ObservableCollection<Product>
+            Products
         {
             get;
             set;
         }
 
-        public ObservableCollection<Product> AllProducts
+        public ObservableCollection<Product>
+            AllProducts
         {
             get;
             set;
         }
 
-        public ObservableCollection<CartItem> CartItems
+        public ObservableCollection<CartItem>
+            CartItems
         {
             get;
             set;
@@ -45,7 +50,8 @@ namespace StoreManagementSystem.ViewModels
         // SELECTED PRODUCT
         // =========================
 
-        private Product _selectedProduct = new();
+        private Product _selectedProduct =
+            new();
 
         public Product SelectedProduct
         {
@@ -63,7 +69,8 @@ namespace StoreManagementSystem.ViewModels
         // SEARCH
         // =========================
 
-        private string _searchText = string.Empty;
+        private string _searchText =
+            string.Empty;
 
         public string SearchText
         {
@@ -80,20 +87,7 @@ namespace StoreManagementSystem.ViewModels
         }
 
         // =========================
-        // DASHBOARD
-        // =========================
-
-        public int TotalProducts =>
-            Products.Count;
-
-        public int LowStockCount =>
-            Products.Count(p => p.StockQuantity <= 5);
-
-        public decimal InventoryValue =>
-            Products.Sum(p => p.TotalValue);
-
-        // =========================
-        // POS TOTALS
+        // TOTALS
         // =========================
 
         public decimal SubTotal =>
@@ -108,24 +102,6 @@ namespace StoreManagementSystem.ViewModels
         // =========================
         // COMMANDS
         // =========================
-
-        public ICommand AddCommand
-        {
-            get;
-            set;
-        }
-
-        public ICommand UpdateCommand
-        {
-            get;
-            set;
-        }
-
-        public ICommand DeleteCommand
-        {
-            get;
-            set;
-        }
 
         public ICommand AddToCartCommand
         {
@@ -143,7 +119,7 @@ namespace StoreManagementSystem.ViewModels
         // CONSTRUCTOR
         // =========================
 
-        public ProductViewModel()
+        public POSViewModel()
         {
             _productRepository =
                 new ProductRepository();
@@ -161,18 +137,6 @@ namespace StoreManagementSystem.ViewModels
                 new ObservableCollection<CartItem>();
 
             LoadProductsAsync();
-
-            AddCommand =
-                new RelayCommand(async _ =>
-                    await AddProductAsync());
-
-            UpdateCommand =
-                new RelayCommand(async _ =>
-                    await UpdateProductAsync());
-
-            DeleteCommand =
-                new RelayCommand(async _ =>
-                    await DeleteProductAsync());
 
             AddToCartCommand =
                 new RelayCommand(AddToCart);
@@ -196,123 +160,17 @@ namespace StoreManagementSystem.ViewModels
                 await _productRepository
                 .GetAllProductsAsync();
 
-            foreach (var product in products)
+            foreach (var product
+                in products)
             {
                 Products.Add(product);
 
                 AllProducts.Add(product);
             }
-
-            RefreshDashboard();
         }
 
         // =========================
-        // ADD PRODUCT
-        // =========================
-
-        private async Task AddProductAsync()
-        {
-            if (!ValidateProduct())
-                return;
-
-            await _productRepository
-                .AddProductAsync(SelectedProduct);
-
-            LoadProductsAsync();
-
-            SelectedProduct = new Product();
-
-            MessageBox.Show(
-                "Product added successfully.");
-        }
-
-        // =========================
-        // UPDATE PRODUCT
-        // =========================
-
-        private async Task UpdateProductAsync()
-        {
-            if (SelectedProduct == null)
-                return;
-
-            if (!ValidateProduct())
-                return;
-
-            await _productRepository
-                .UpdateProductAsync(SelectedProduct);
-
-            LoadProductsAsync();
-
-            MessageBox.Show(
-                "Product updated successfully.");
-        }
-
-        // =========================
-        // DELETE PRODUCT
-        // =========================
-
-        private async Task DeleteProductAsync()
-        {
-            if (SelectedProduct == null)
-                return;
-
-            await _productRepository
-                .DeleteProductAsync(
-                    SelectedProduct.Id);
-
-            LoadProductsAsync();
-
-            SelectedProduct = new Product();
-
-            MessageBox.Show(
-                "Product deleted successfully.");
-        }
-
-        // =========================
-        // VALIDATION
-        // =========================
-
-        private bool ValidateProduct()
-        {
-            if (string.IsNullOrWhiteSpace(
-                SelectedProduct.Name))
-            {
-                MessageBox.Show(
-                    "Product name is required.");
-
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(
-                SelectedProduct.SKU))
-            {
-                MessageBox.Show(
-                    "SKU is required.");
-
-                return false;
-            }
-
-            if (SelectedProduct.Price <= 0)
-            {
-                MessageBox.Show(
-                    "Price must be greater than zero.");
-
-                return false;
-            }
-
-            if (SelectedProduct.StockQuantity < 0)
-            {
-                MessageBox.Show(
-                    "Invalid stock quantity.");
-
-                return false;
-            }
-
-            return true;
-        }
-
-        // =========================
-        // SEARCH
+        // FILTER PRODUCTS
         // =========================
 
         private void FilterProducts()
@@ -320,7 +178,8 @@ namespace StoreManagementSystem.ViewModels
             Products.Clear();
 
             var filteredProducts =
-                string.IsNullOrWhiteSpace(SearchText)
+                string.IsNullOrWhiteSpace(
+                    SearchText)
                 ? AllProducts
                 : new ObservableCollection<Product>(
                     AllProducts.Where(p =>
@@ -329,24 +188,25 @@ namespace StoreManagementSystem.ViewModels
                             System.StringComparison
                             .OrdinalIgnoreCase)));
 
-            foreach (var product in filteredProducts)
+            foreach (var product
+                in filteredProducts)
             {
                 Products.Add(product);
             }
-
-            RefreshDashboard();
         }
 
         // =========================
         // ADD TO CART
         // =========================
 
-        private void AddToCart(object? parameter)
+        private void AddToCart(
+            object? parameter)
         {
             if (SelectedProduct == null)
                 return;
 
-            if (SelectedProduct.StockQuantity <= 0)
+            if (SelectedProduct.StockQuantity
+                <= 0)
             {
                 MessageBox.Show(
                     "Product out of stock.");
@@ -361,18 +221,30 @@ namespace StoreManagementSystem.ViewModels
 
             if (existingItem != null)
             {
+                if (existingItem.Quantity
+                    >= SelectedProduct
+                    .StockQuantity)
+                {
+                    MessageBox.Show(
+                        "No more stock available.");
+
+                    return;
+                }
+
                 existingItem.Quantity++;
             }
             else
             {
                 CartItems.Add(new CartItem
                 {
-                    Product = SelectedProduct,
+                    Product =
+                        SelectedProduct,
+
                     Quantity = 1
                 });
             }
 
-            RefreshCart();
+            RefreshTotals();
         }
 
         // =========================
@@ -400,7 +272,8 @@ namespace StoreManagementSystem.ViewModels
                         DateTime.Now
                 };
 
-            foreach (var cartItem in CartItems)
+            foreach (var cartItem
+                in CartItems)
             {
                 transaction.Items.Add(
                     new TransactionItem
@@ -425,7 +298,7 @@ namespace StoreManagementSystem.ViewModels
 
             CartItems.Clear();
 
-            RefreshCart();
+            RefreshTotals();
 
             LoadProductsAsync();
 
@@ -434,26 +307,10 @@ namespace StoreManagementSystem.ViewModels
         }
 
         // =========================
-        // REFRESH DASHBOARD
+        // REFRESH TOTALS
         // =========================
 
-        private void RefreshDashboard()
-        {
-            OnPropertyChanged(
-                nameof(TotalProducts));
-
-            OnPropertyChanged(
-                nameof(LowStockCount));
-
-            OnPropertyChanged(
-                nameof(InventoryValue));
-        }
-
-        // =========================
-        // REFRESH CART
-        // =========================
-
-        private void RefreshCart()
+        private void RefreshTotals()
         {
             OnPropertyChanged(
                 nameof(SubTotal));

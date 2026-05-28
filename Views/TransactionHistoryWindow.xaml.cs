@@ -2,9 +2,10 @@
 
 namespace StoreManagementSystem.Views
 {
-    public partial class MainWindow : Window
+    public partial class TransactionHistoryWindow
+        : Window
     {
-        public MainWindow()
+        public TransactionHistoryWindow()
         {
             InitializeComponent();
         }

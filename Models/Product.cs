@@ -1,23 +1,31 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace StoreManagementSystem.Models
 {
     public class Product : INotifyPropertyChanged
     {
         private string _name = string.Empty;
+
         private string _sku = string.Empty;
+
         private decimal _price;
+
         private int _stockQuantity;
+
+        private string _category = string.Empty;
 
         public int Id { get; set; }
 
         public string Name
         {
             get => _name;
+
             set
             {
                 _name = value;
-                OnPropertyChanged(nameof(Name));
+
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(TotalValue));
             }
         }
@@ -25,20 +33,24 @@ namespace StoreManagementSystem.Models
         public string SKU
         {
             get => _sku;
+
             set
             {
                 _sku = value;
-                OnPropertyChanged(nameof(SKU));
+
+                OnPropertyChanged();
             }
         }
 
         public decimal Price
         {
             get => _price;
+
             set
             {
                 _price = value;
-                OnPropertyChanged(nameof(Price));
+
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(TotalValue));
             }
         }
@@ -46,27 +58,42 @@ namespace StoreManagementSystem.Models
         public int StockQuantity
         {
             get => _stockQuantity;
+
             set
             {
                 _stockQuantity = value;
 
-                OnPropertyChanged(nameof(StockQuantity));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(IsLowStock));
                 OnPropertyChanged(nameof(TotalValue));
             }
         }
 
-        // Low Stock Alert
-        public bool IsLowStock => StockQuantity < 5;
+        public string Category
+        {
+            get => _category;
 
-        // Total Inventory Value
-        public decimal TotalValue => Price * StockQuantity;
+            set
+            {
+                _category = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsLowStock =>
+            StockQuantity <= 5;
+
+        public decimal TotalValue =>
+            Price * StockQuantity;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(
+            [CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this,
+            PropertyChanged?.Invoke(
+                this,
                 new PropertyChangedEventArgs(propertyName));
         }
     }

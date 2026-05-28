@@ -1,33 +1,42 @@
 ﻿<UserControl x:Class="StoreManagementSystem.Views.POSView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:StoreManagementSystem.ViewModels">
+
+    <!-- ================= DATACONTEXT ================= -->
+
+    <UserControl.DataContext>
+        <viewModels:POSViewModel/>
+    </UserControl.DataContext>
+
+    <!-- ================= UI ================= -->
 
     <Grid Background="#F1F5F9">
 
         <Grid.ColumnDefinitions>
 
-            <!-- Products -->
+            <!-- PRODUCTS -->
 
             <ColumnDefinition Width="2*"/>
 
-            <!-- Cart -->
+            <!-- CART -->
 
             <ColumnDefinition Width="*"/>
 
         </Grid.ColumnDefinitions>
 
-        <!-- LEFT SIDE -->
+        <!-- ================= LEFT SIDE ================= -->
 
         <StackPanel Margin="20">
 
-            <!-- Header -->
+            <!-- HEADER -->
 
             <TextBlock Text="Sales Terminal"
                        FontSize="28"
                        FontWeight="Bold"
                        Margin="0 0 0 20"/>
 
-            <!-- Search -->
+            <!-- SEARCH -->
 
             <TextBox Width="300"
                      Height="40"
@@ -37,35 +46,90 @@
                      Text="{Binding SearchText,
                      UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Products -->
+            <!-- PRODUCTS TABLE -->
 
-            <DataGrid ItemsSource="{Binding Products}"
-                      SelectedItem="{Binding SelectedProduct}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      RowHeight="45"
-                      FontSize="14"
-                      HeadersVisibility="Column">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="10">
 
-                <DataGrid.Columns>
+                <DataGrid ItemsSource="{Binding Products}"
+                          SelectedItem="{Binding SelectedProduct}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          RowHeight="45"
+                          FontSize="14"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          GridLinesVisibility="None">
 
-                    <DataGridTextColumn Header="Product"
-                                        Binding="{Binding Name}"
-                                        Width="*"/>
+                    <!-- HEADER STYLE -->
 
-                    <DataGridTextColumn Header="Price"
-                                        Binding="{Binding Price}"
-                                        Width="*"/>
+                    <DataGrid.ColumnHeaderStyle>
 
-                    <DataGridTextColumn Header="Stock"
-                                        Binding="{Binding StockQuantity}"
-                                        Width="*"/>
+                        <Style TargetType="DataGridColumnHeader">
 
-                </DataGrid.Columns>
+                            <Setter Property="Background"
+                                    Value="#1E293B"/>
 
-            </DataGrid>
+                            <Setter Property="Foreground"
+                                    Value="White"/>
 
-            <!-- Add To Cart -->
+                            <Setter Property="FontWeight"
+                                    Value="Bold"/>
+
+                            <Setter Property="Height"
+                                    Value="40"/>
+
+                        </Style>
+
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <!-- COLUMNS -->
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Product"
+                                            Binding="{Binding Name}"
+                                            Width="2*"/>
+
+                        <DataGridTextColumn Header="Price"
+                                            Binding="{Binding Price,
+                                            StringFormat={}{0:C}}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Stock"
+                                            Binding="{Binding StockQuantity}"
+                                            Width="*"/>
+
+                    </DataGrid.Columns>
+
+                    <!-- LOW STOCK ALERT -->
+
+                    <DataGrid.RowStyle>
+
+                        <Style TargetType="DataGridRow">
+
+                            <Style.Triggers>
+
+                                <DataTrigger Binding="{Binding IsLowStock}"
+                                             Value="True">
+
+                                    <Setter Property="Background"
+                                            Value="#FECACA"/>
+
+                                </DataTrigger>
+
+                            </Style.Triggers>
+
+                        </Style>
+
+                    </DataGrid.RowStyle>
+
+                </DataGrid>
+
+            </Border>
+
+            <!-- ADD TO CART -->
 
             <Button Content="Add To Cart"
                     Height="45"
@@ -73,11 +137,12 @@
                     Background="#2563EB"
                     Foreground="White"
                     FontWeight="Bold"
+                    BorderThickness="0"
                     Command="{Binding AddToCartCommand}"/>
 
         </StackPanel>
 
-        <!-- RIGHT SIDE -->
+        <!-- ================= RIGHT SIDE ================= -->
 
         <Border Grid.Column="1"
                 Background="White"
@@ -87,55 +152,86 @@
 
             <StackPanel>
 
+                <!-- CART HEADER -->
+
                 <TextBlock Text="Current Cart"
                            FontSize="24"
                            FontWeight="Bold"
                            Margin="0 0 0 20"/>
 
-                <!-- Cart Items -->
+                <!-- CART ITEMS -->
 
                 <DataGrid ItemsSource="{Binding CartItems}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
-                          Height="350">
+                          Height="350"
+                          BorderThickness="0"
+                          GridLinesVisibility="None">
+
+                    <DataGrid.ColumnHeaderStyle>
+
+                        <Style TargetType="DataGridColumnHeader">
+
+                            <Setter Property="Background"
+                                    Value="#1E293B"/>
+
+                            <Setter Property="Foreground"
+                                    Value="White"/>
+
+                            <Setter Property="FontWeight"
+                                    Value="Bold"/>
+
+                        </Style>
+
+                    </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Product"
-                                            Binding="{Binding Name}"
+                                            Binding="{Binding Product.Name}"
+                                            Width="2*"/>
+
+                        <DataGridTextColumn Header="Qty"
+                                            Binding="{Binding Quantity}"
                                             Width="*"/>
 
                         <DataGridTextColumn Header="Price"
-                                            Binding="{Binding Price}"
+                                            Binding="{Binding Product.Price,
+                                            StringFormat={}{0:C}}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Total"
+                                            Binding="{Binding LineTotal,
+                                            StringFormat={}{0:C}}"
                                             Width="*"/>
 
                     </DataGrid.Columns>
 
                 </DataGrid>
 
-                <!-- Totals -->
+                <!-- TOTALS -->
 
                 <StackPanel Margin="0 20 0 0">
 
                     <TextBlock Text="{Binding SubTotal,
-                    StringFormat=Subtotal: {0:C}}"
+                               StringFormat=Subtotal: {0:C}}"
                                FontSize="16"
                                Margin="0 5"/>
 
                     <TextBlock Text="{Binding VAT,
-                    StringFormat=VAT: {0:C}}"
+                               StringFormat=VAT: {0:C}}"
                                FontSize="16"
                                Margin="0 5"/>
 
                     <TextBlock Text="{Binding FinalTotal,
-                    StringFormat=Total: {0:C}}"
+                               StringFormat=Total: {0:C}}"
                                FontSize="22"
                                FontWeight="Bold"
                                Margin="0 10"/>
 
                 </StackPanel>
 
-                <!-- Checkout -->
+                <!-- CHECKOUT -->
 
                 <Button Content="Checkout"
                         Height="50"
@@ -144,6 +240,7 @@
                         Foreground="White"
                         FontWeight="Bold"
                         FontSize="16"
+                        BorderThickness="0"
                         Command="{Binding CheckoutCommand}"/>
 
             </StackPanel>

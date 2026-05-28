@@ -1,6 +1,5 @@
 ﻿using System.Windows;
-using StoreManagementSystem.Models;
-using StoreManagementSystem.Services;
+using StoreManagementSystem.ViewModels;
 
 namespace StoreManagementSystem.Views
 {
@@ -11,35 +10,16 @@ namespace StoreManagementSystem.Views
             InitializeComponent();
         }
 
-
-    private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void PasswordBox_PasswordChanged(
+            object sender,
+            RoutedEventArgs e)
         {
-            string username = UsernameTextBox.Text;
-            string password = PasswordBox.Password;
-
-            AuthService authService = new AuthService();
-
-            User? loggedInUser = authService.Login(username, password);
-
-            if (loggedInUser != null)
+            if (DataContext is LoginViewModel
+                viewModel)
             {
-                CurrentUserService.CurrentUser = loggedInUser;
-
-                MessageBox.Show(
-                    $"Welcome {loggedInUser.FullName}\nRole: {loggedInUser.Role}"
-                );
-
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Invalid Username or Password");
+                viewModel.Password =
+                    PasswordBox.Password;
             }
         }
     }
-
-
 }

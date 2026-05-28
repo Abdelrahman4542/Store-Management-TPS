@@ -10,12 +10,9 @@ Database=store_Management;
 Trusted_Connection=True;
 TrustServerCertificate=True;";
 
-
-    public static SqlConnection GetConnection()
+        public static SqlConnection GetConnection()
         {
             return new SqlConnection(connectionString);
         }
     }
-
-
 }
