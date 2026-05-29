@@ -156,7 +156,7 @@
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Product"
-                                                Binding="{Binding Name}"
+                                                Binding="{Binding ProductName}"
                                                 Width="2*"/>
 
                             <DataGridTextColumn Header="Quantity"

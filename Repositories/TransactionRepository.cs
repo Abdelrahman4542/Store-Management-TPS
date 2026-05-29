@@ -246,5 +246,131 @@ namespace StoreManagementSystem.Repositories
 
             return items;
         }
+        // ================= TODAY SALES =================
+
+        public async Task<decimal> GetTodaySalesAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT ISNULL(
+            SUM(FinalTotal),0)
+          FROM Transactions
+          WHERE CAST(TransactionDate AS DATE)
+          = CAST(GETDATE() AS DATE)";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return Convert.ToDecimal(
+                await command.ExecuteScalarAsync());
+        }
+
+        // ================= MONTHLY REVENUE =================
+
+        public async Task<decimal> GetMonthlyRevenueAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT ISNULL(
+            SUM(FinalTotal),0)
+          FROM Transactions
+          WHERE MONTH(TransactionDate)
+          = MONTH(GETDATE())
+          AND YEAR(TransactionDate)
+          = YEAR(GETDATE())";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return Convert.ToDecimal(
+                await command.ExecuteScalarAsync());
+        }
+        // ================= TOP SELLING PRODUCTS =================
+
+        public async Task<Dictionary<string, int>>
+            GetTopSellingProductsAsync()
+        {
+            Dictionary<string, int> products = new();
+
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT TOP 10
+            p.Name,
+            SUM(ti.Quantity) AS TotalSold
+          FROM TransactionItems ti
+          INNER JOIN Products p
+          ON ti.ProductId = p.ProductId
+          GROUP BY p.Name
+          ORDER BY TotalSold DESC";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            SqlDataReader reader =
+                await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                products.Add(
+                    reader["Name"].ToString()!,
+                    Convert.ToInt32(
+                        reader["TotalSold"]));
+            }
+
+            return products;
+        }
+        // ================= WEEKLY SALES =================
+
+        public async Task<List<double>>
+            GetWeeklySalesAsync()
+        {
+            List<double> sales = new();
+
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            for (int i = 6; i >= 0; i--)
+            {
+                DateTime day =
+                    DateTime.Today.AddDays(-i);
+
+                string query =
+                    @"SELECT ISNULL(
+                SUM(FinalTotal),0)
+              FROM Transactions
+              WHERE CAST(TransactionDate AS DATE)
+              = @Date";
+
+                SqlCommand command =
+                    new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue(
+                    "@Date",
+                    day.Date);
+
+                double total =
+                    Convert.ToDouble(
+                        await command.ExecuteScalarAsync());
+
+                sales.Add(total);
+            }
+
+            return sales;
+        }
+
     }
 }

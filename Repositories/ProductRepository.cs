@@ -200,5 +200,90 @@ namespace StoreManagementSystem.Repositories
 
             await command.ExecuteNonQueryAsync();
         }
+        // ================= PRODUCTS COUNT =================
+
+        public async Task<int> GetProductsCountAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT COUNT(*)
+          FROM Products
+          WHERE IsActive = 1";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return (int)await command.ExecuteScalarAsync();
+        }
+
+        // ================= LOW STOCK COUNT =================
+
+        public async Task<int> GetLowStockCountAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT COUNT(*)
+          FROM Products
+          WHERE StockQuantity <= 5
+          AND IsActive = 1";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return (int)await command.ExecuteScalarAsync();
+        }
+
+        // ================= IN STOCK COUNT =================
+
+        public async Task<int> GetInStockCountAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT COUNT(*)
+          FROM Products
+          WHERE StockQuantity > 10
+          AND IsActive = 1";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return (int)await command.ExecuteScalarAsync();
+        }
+
+        // ================= OUT OF STOCK COUNT =================
+
+        public async Task<int> GetOutOfStockCountAsync()
+        {
+            using SqlConnection connection =
+                DbConnection.GetConnection();
+
+            await connection.OpenAsync();
+
+            string query =
+                @"SELECT COUNT(*)
+          FROM Products
+          WHERE StockQuantity = 0
+          AND IsActive = 1";
+
+            SqlCommand command =
+                new SqlCommand(query, connection);
+
+            return (int)await command.ExecuteScalarAsync();
+        }
+
+
+
     }
 }

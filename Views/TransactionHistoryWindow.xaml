@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:StoreManagementSystem.ViewModels"
         Title="Transaction History"
-         Height="750"
+        Height="750"
         Width="1100"
         WindowStartupLocation="CenterScreen"
         Background="#F1F5F9">
@@ -185,6 +185,22 @@
                                FontWeight="Bold"
                                Margin="0 0 0 15"/>
 
+                    <!-- VIEW DETAILS BUTTON -->
+
+                    <Button Content="View Details"
+                            Height="45"
+                            Width="180"
+                            HorizontalAlignment="Left"
+                            Margin="0 0 0 15"
+                            Background="#2563EB"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Command="{Binding ViewDetailsCommand}"/>
+
+                    <!-- DATAGRID -->
+
                     <DataGrid ItemsSource="{Binding Transactions}"
                               SelectedItem="{Binding SelectedTransaction}"
                               AutoGenerateColumns="False"
@@ -194,7 +210,7 @@
                               RowHeight="45"
                               FontSize="14"
                               GridLinesVisibility="None"
-                              Height="420"
+                              Height="300"
                               IsReadOnly="True"
                               SelectionMode="Single">
 
@@ -314,18 +330,6 @@
                         </TextBlock.Style>
 
                     </TextBlock>
-
-                    <!-- VIEW DETAILS -->
-
-                    <Button Content="View Details"
-                            Height="45"
-                            Margin="0 20 0 0"
-                            Background="#2563EB"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Command="{Binding ViewDetailsCommand}"/>
 
                 </StackPanel>
 

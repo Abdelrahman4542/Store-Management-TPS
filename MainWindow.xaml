@@ -6,11 +6,8 @@
         xmlns:viewModels="clr-namespace:StoreManagementSystem.ViewModels"
         mc:Ignorable="d"
         Title="Store Management System"
-        
-        
+    
         Background="#EEF2F7">
-
-    <!-- ================= DATACONTEXT ================= -->
 
     <Window.DataContext>
 
@@ -18,11 +15,7 @@
 
     </Window.DataContext>
 
-    <!-- ================= UI ================= -->
-
     <Grid>
-
-        <!-- ================= COLUMNS ================= -->
 
         <Grid.ColumnDefinitions>
 
@@ -34,7 +27,7 @@
 
         <!-- ================= SIDEBAR ================= -->
 
-        <Border Background="#1F2937">
+        <Border Background="#0F172A" >
 
             <StackPanel>
 
@@ -60,8 +53,6 @@
 
                 <StackPanel Margin="10 20 10 10">
 
-                    <!-- DASHBOARD -->
-
                     <Button Content="Dashboard"
                             Height="45"
                             Margin="0 0 0 10"
@@ -70,8 +61,6 @@
                             BorderThickness="0"
                             FontWeight="Bold"
                             Command="{Binding OpenDashboardCommand}"/>
-
-                    <!-- INVENTORY -->
 
                     <Button Content="Inventory"
                             Height="45"
@@ -83,8 +72,6 @@
                             Visibility="{Binding InventoryVisibility}"
                             Command="{Binding OpenInventoryCommand}"/>
 
-                    <!-- PRODUCTS -->
-
                     <Button Content="Products"
                             Height="45"
                             Margin="0 0 0 10"
@@ -95,8 +82,6 @@
                             Visibility="{Binding ProductsVisibility}"
                             Command="{Binding OpenProductsCommand}"/>
 
-                    <!-- POS -->
-
                     <Button Content="POS Terminal"
                             Height="45"
                             Margin="0 0 0 10"
@@ -106,8 +91,6 @@
                             FontWeight="Bold"
                             Command="{Binding OpenPOSCommand}"/>
 
-                    <!-- TRANSACTIONS -->
-
                     <Button Content="Transactions"
                             Height="45"
                             Margin="0 0 0 10"
@@ -116,8 +99,6 @@
                             BorderThickness="0"
                             FontWeight="Bold"
                             Command="{Binding OpenTransactionsCommand}"/>
-
-                    <!-- LOGOUT -->
 
                     <Button Content="Logout"
                             Height="45"
@@ -134,267 +115,10 @@
 
         </Border>
 
-        <!-- ================= MAIN CONTENT ================= -->
+        <!-- ================= CONTENT ================= -->
 
-        <Grid Grid.Column="1">
-
-            <!-- ================= DASHBOARD ================= -->
-
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          Visibility="{Binding DashboardVisibility}">
-
-                <Grid Margin="20">
-
-                    <!-- ROWS -->
-
-                    <Grid.RowDefinitions>
-
-                        <RowDefinition Height="70"/>
-
-                        <RowDefinition Height="140"/>
-
-                        <RowDefinition Height="140"/>
-
-                        <RowDefinition Height="300"/>
-
-                        <RowDefinition Height="300"/>
-
-                    </Grid.RowDefinitions>
-
-                    <!-- ================= HEADER ================= -->
-
-                    <Border Background="White"
-                            CornerRadius="12"
-                            Padding="20">
-
-                        <DockPanel>
-
-                            <TextBlock Text="{Binding WelcomeMessage}"
-                                       FontSize="24"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"/>
-
-                        </DockPanel>
-
-                    </Border>
-
-                    <!-- ================= KPI ROW 1 ================= -->
-
-                    <UniformGrid Grid.Row="1"
-                                 Columns="3"
-                                 Margin="0 20 0 0">
-
-                        <!-- PRODUCTS -->
-
-                        <Border Background="White"
-                                CornerRadius="12"
-                                Margin="10"
-                                Padding="20">
-
-                            <StackPanel>
-
-                                <TextBlock Text="Products"
-                                           Foreground="Gray"/>
-
-                                <TextBlock Text="{Binding ProductsCount}"
-                                           FontSize="32"
-                                           FontWeight="Bold"/>
-
-                            </StackPanel>
-
-                        </Border>
-
-                        <!-- LOW STOCK -->
-
-                        <Border Background="White"
-                                CornerRadius="12"
-                                Margin="10"
-                                Padding="20">
-
-                            <StackPanel>
-
-                                <TextBlock Text="Low Stock"
-                                           Foreground="Gray"/>
-
-                                <TextBlock Text="{Binding LowStockCount}"
-                                           FontSize="32"
-                                           FontWeight="Bold"
-                                           Foreground="#DC2626"/>
-
-                            </StackPanel>
-
-                        </Border>
-
-                        <!-- SALES -->
-
-                        <Border Background="White"
-                                CornerRadius="12"
-                                Margin="10"
-                                Padding="20">
-
-                            <StackPanel>
-
-                                <TextBlock Text="Today Sales"
-                                           Foreground="Gray"/>
-
-                                <TextBlock Text="{Binding TodaySales,
-                                           StringFormat={}{0:C}}"
-                                           FontSize="32"
-                                           FontWeight="Bold"
-                                           Foreground="#16A34A"/>
-
-                            </StackPanel>
-
-                        </Border>
-
-                    </UniformGrid>
-
-                    <!-- ================= KPI ROW 2 ================= -->
-
-                    <UniformGrid Grid.Row="2"
-                                 Columns="2"
-                                 Margin="0 10 0 0"
-                                 Visibility="{Binding RevenueVisibility}">
-
-                        <!-- REVENUE -->
-
-                        <Border Background="White"
-                                CornerRadius="12"
-                                Margin="10"
-                                Padding="20">
-
-                            <StackPanel>
-
-                                <TextBlock Text="Monthly Revenue"
-                                           Foreground="Gray"/>
-
-                                <TextBlock Text="{Binding MonthlyRevenue,
-                                           StringFormat={}{0:C}}"
-                                           FontSize="28"
-                                           FontWeight="Bold"/>
-
-                            </StackPanel>
-
-                        </Border>
-
-                        <!-- GROWTH -->
-
-                        <Border Background="White"
-                                CornerRadius="12"
-                                Margin="10"
-                                Padding="20">
-
-                            <StackPanel>
-
-                                <TextBlock Text="Growth"
-                                           Foreground="Gray"/>
-
-                                <TextBlock Text="{Binding GrowthRate}"
-                                           FontSize="28"
-                                           FontWeight="Bold"
-                                           Foreground="#2563EB"/>
-
-                            </StackPanel>
-
-                        </Border>
-
-                    </UniformGrid>
-
-                    <!-- ================= SALES CHART ================= -->
-
-                    <Border Grid.Row="3"
-                            Background="White"
-                            CornerRadius="12"
-                            Margin="10"
-                            Padding="20"
-                            Visibility="{Binding AnalyticsVisibility}">
-
-                        <Grid>
-
-                            <TextBlock Text="Sales Analytics"
-                                       FontSize="20"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Top"/>
-
-                            <Border Margin="0 40 0 0"
-                                    Background="#F8FAFC"
-                                    CornerRadius="10">
-
-                                <TextBlock Text="Sales Trend Chart"
-                                           Foreground="Gray"
-                                           FontSize="18"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-
-                            </Border>
-
-                        </Grid>
-
-                    </Border>
-
-                    <!-- ================= ANALYTICS ================= -->
-
-                    <Border Grid.Row="4"
-                            Background="White"
-                            CornerRadius="12"
-                            Margin="10"
-                            Padding="20"
-                            Visibility="{Binding AnalyticsVisibility}">
-
-                        <Grid>
-
-                            <Grid.ColumnDefinitions>
-
-                                <ColumnDefinition Width="*"/>
-
-                                <ColumnDefinition Width="*"/>
-
-                            </Grid.ColumnDefinitions>
-
-                            <!-- CATEGORY SALES -->
-
-                            <Border Grid.Column="0"
-                                    Margin="10"
-                                    Background="#F8FAFC"
-                                    CornerRadius="10">
-
-                                <TextBlock Text="Category Sales"
-                                           Foreground="Gray"
-                                           FontSize="18"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-
-                            </Border>
-
-                            <!-- INVENTORY -->
-
-                            <Border Grid.Column="1"
-                                    Margin="10"
-                                    Background="#F8FAFC"
-                                    CornerRadius="10">
-
-                                <TextBlock Text="Inventory Distribution"
-                                           Foreground="Gray"
-                                           FontSize="18"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-
-                            </Border>
-
-                        </Grid>
-
-                    </Border>
-
-                </Grid>
-
-            </ScrollViewer>
-
-            <!-- ================= DYNAMIC CONTENT ================= -->
-
-            <ContentControl Content="{Binding CurrentView}"
-                            Visibility="{Binding ContentVisibility}"/>
-
-        </Grid>
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentView}"/>
 
     </Grid>
 

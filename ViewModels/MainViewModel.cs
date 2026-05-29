@@ -28,46 +28,12 @@ namespace StoreManagementSystem.ViewModels
         }
 
         // =========================
-        // DASHBOARD VISIBILITY
-        // =========================
-
-        private Visibility _dashboardVisibility =
-            Visibility.Visible;
-
-        public Visibility DashboardVisibility
-        {
-            get => _dashboardVisibility;
-
-            set
-            {
-                _dashboardVisibility = value;
-
-                OnPropertyChanged();
-            }
-        }
-
-        // =========================
-        // CONTENT VISIBILITY
-        // =========================
-
-        private Visibility _contentVisibility =
-            Visibility.Collapsed;
-
-        public Visibility ContentVisibility
-        {
-            get => _contentVisibility;
-
-            set
-            {
-                _contentVisibility = value;
-
-                OnPropertyChanged();
-            }
-        }
-
-        // =========================
         // ROLE-BASED VISIBILITY
         // =========================
+
+        public bool IsCashier =>
+            CurrentUserService.CurrentUser?.Role
+            == "Cashier";
 
         public Visibility InventoryVisibility =>
             IsCashier
@@ -78,43 +44,6 @@ namespace StoreManagementSystem.ViewModels
             IsCashier
             ? Visibility.Collapsed
             : Visibility.Visible;
-
-        public Visibility RevenueVisibility =>
-            IsCashier
-            ? Visibility.Collapsed
-            : Visibility.Visible;
-
-        public Visibility AnalyticsVisibility =>
-            IsCashier
-            ? Visibility.Collapsed
-            : Visibility.Visible;
-
-        // =========================
-        // USER INFO
-        // =========================
-
-        public bool IsCashier =>
-            CurrentUserService.CurrentUser?.Role
-            == "Cashier";
-
-        public string WelcomeMessage =>
-            CurrentUserService.CurrentUser != null
-            ? $"Welcome, {CurrentUserService.CurrentUser.FullName}"
-            : "Welcome";
-
-        // =========================
-        // DASHBOARD DATA
-        // =========================
-
-        public int ProductsCount => 150;
-
-        public int LowStockCount => 12;
-
-        public decimal TodaySales => 3420;
-
-        public decimal MonthlyRevenue => 105315;
-
-        public string GrowthRate => "+12.5%";
 
         // =========================
         // COMMANDS
@@ -173,6 +102,9 @@ namespace StoreManagementSystem.ViewModels
 
             LogoutCommand =
                 new RelayCommand(Logout);
+
+            CurrentView =
+                new DashboardView();
         }
 
         // =========================
@@ -182,13 +114,8 @@ namespace StoreManagementSystem.ViewModels
         private void OpenDashboard(
             object? parameter)
         {
-            CurrentView = null;
-
-            DashboardVisibility =
-                Visibility.Visible;
-
-            ContentVisibility =
-                Visibility.Collapsed;
+            CurrentView =
+                new DashboardView();
         }
 
         // =========================
@@ -200,12 +127,6 @@ namespace StoreManagementSystem.ViewModels
         {
             CurrentView =
                 new InventoryView();
-
-            DashboardVisibility =
-                Visibility.Collapsed;
-
-            ContentVisibility =
-                Visibility.Visible;
         }
 
         // =========================
@@ -217,12 +138,6 @@ namespace StoreManagementSystem.ViewModels
         {
             CurrentView =
                 new ProductsView();
-
-            DashboardVisibility =
-                Visibility.Collapsed;
-
-            ContentVisibility =
-                Visibility.Visible;
         }
 
         // =========================
@@ -234,12 +149,6 @@ namespace StoreManagementSystem.ViewModels
         {
             CurrentView =
                 new POSView();
-
-            DashboardVisibility =
-                Visibility.Collapsed;
-
-            ContentVisibility =
-                Visibility.Visible;
         }
 
         // =========================
