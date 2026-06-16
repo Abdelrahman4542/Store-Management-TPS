@@ -90,10 +90,23 @@ namespace StoreManagementSystem.ViewModels
             {
                 _monthlyRevenue = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(GrowthRate));
             }
         }
 
-        public string GrowthRate => "Dynamic";
+        public string GrowthRate
+        {
+            get
+            {
+                if (MonthlyRevenue >= 50000)
+                    return "+25%";
+
+                if (MonthlyRevenue >= 20000)
+                    return "+15%";
+
+                return "+5%";
+            }
+        }
 
         // =========================
         // CHARTS
