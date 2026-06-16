@@ -10,11 +10,8 @@
     <Grid Background="#F8FAFC">
 
         <Grid.ColumnDefinitions>
-
             <ColumnDefinition Width="2.3*"/>
-
             <ColumnDefinition Width="1.2*"/>
-
         </Grid.ColumnDefinitions>
 
         <!-- LEFT SIDE -->
@@ -25,31 +22,44 @@
                 CornerRadius="20"
                 Padding="20">
 
-            <StackPanel>
+            <Grid>
 
-                <TextBlock Text="Point Of Sale Terminal"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Point Of Sale Terminal"
                            FontSize="30"
                            FontWeight="Bold"/>
 
-                <TextBlock Text="Search products and create transactions"
+                <TextBlock Grid.Row="1"
+                           Text="Search products and create transactions"
                            Foreground="Gray"
                            Margin="0 5 0 20"/>
 
-                <TextBox Height="45"
+                <TextBox Grid.Row="2"
+                         Height="45"
                          FontSize="15"
                          Padding="12"
                          Margin="0 0 0 20"
                          Text="{Binding SearchText,
                          UpdateSourceTrigger=PropertyChanged}"/>
 
-                <DataGrid ItemsSource="{Binding Products}"
+                <DataGrid Grid.Row="3"
+                          ItemsSource="{Binding Products}"
                           SelectedItem="{Binding SelectedProduct}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
                           BorderThickness="0"
                           RowHeight="45"
-                          GridLinesVisibility="Horizontal">
+                          GridLinesVisibility="Horizontal"
+                          Margin="0 0 0 20">
 
                     <DataGrid.ColumnHeaderStyle>
 
@@ -110,9 +120,9 @@
 
                 </DataGrid>
 
-                <Button Content="ADD TO CART"
+                <Button Grid.Row="4"
+                        Content="ADD TO CART"
                         Height="50"
-                        Margin="0 20 0 0"
                         FontWeight="Bold"
                         FontSize="15"
                         Background="#2563EB"
@@ -120,7 +130,7 @@
                         BorderThickness="0"
                         Command="{Binding AddToCartCommand}"/>
 
-            </StackPanel>
+            </Grid>
 
         </Border>
 
@@ -135,15 +145,10 @@
             <Grid>
 
                 <Grid.RowDefinitions>
-
                     <RowDefinition Height="Auto"/>
-
                     <RowDefinition Height="*"/>
-
                     <RowDefinition Height="Auto"/>
-
                     <RowDefinition Height="Auto"/>
-
                 </Grid.RowDefinitions>
 
                 <!-- HEADER -->
