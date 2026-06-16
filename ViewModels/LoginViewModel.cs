@@ -59,7 +59,6 @@ namespace StoreManagementSystem.ViewModels
         public ICommand LoginCommand
         {
             get;
-            set;
         }
 
         // =========================
@@ -72,8 +71,8 @@ namespace StoreManagementSystem.ViewModels
                 new AuthService();
 
             LoginCommand =
-                new RelayCommand(async _ =>
-                    await LoginAsync());
+                new AsyncRelayCommand(
+                    async _ => await LoginAsync());
         }
 
         // =========================
@@ -82,54 +81,70 @@ namespace StoreManagementSystem.ViewModels
 
         private async Task LoginAsync()
         {
-            if (string.IsNullOrWhiteSpace(
-                Username))
+            try
             {
-                MessageBox.Show(
-                    "Please enter username.");
-
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(
-                Password))
-            {
-                MessageBox.Show(
-                    "Please enter password.");
-
-                return;
-            }
-
-            var user =
-                await _authService.LoginAsync(
-                    Username,
-                    Password);
-
-            if (user == null)
-            {
-                MessageBox.Show(
-                    "Invalid username or password.");
-
-                return;
-            }
-
-            CurrentUserService.CurrentUser =
-                user;
-
-            MainWindow mainWindow =
-                new MainWindow();
-
-            mainWindow.Show();
-
-            foreach (Window window
-                in Application.Current.Windows)
-            {
-                if (window is LoginWindow)
+                if (string.IsNullOrWhiteSpace(
+                    Username))
                 {
-                    window.Close();
+                    MessageBox.Show(
+                        "Please enter username.",
+                        "Validation",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
 
-                    break;
+                    return;
                 }
+
+                if (string.IsNullOrWhiteSpace(
+                    Password))
+                {
+                    MessageBox.Show(
+                        "Please enter password.",
+                        "Validation",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                var user =
+                    await _authService.LoginAsync(
+                        Username.Trim(),
+                        Password);
+
+                if (user == null)
+                {
+                    MessageBox.Show(
+                        "Invalid username or password.",
+                        "Login Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                    return;
+                }
+
+                CurrentUserService.CurrentUser =
+                    user;
+
+                MainWindow mainWindow =
+                    new MainWindow();
+
+                mainWindow.Show();
+
+                Window? loginWindow =
+                    Application.Current.Windows
+                    .OfType<LoginWindow>()
+                    .FirstOrDefault();
+
+                loginWindow?.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Login failed:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }

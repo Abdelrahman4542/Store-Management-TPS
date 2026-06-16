@@ -1,8 +1,8 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 using StoreManagementSystem.Repositories;
-using System.Windows;
 using StoreManagementSystem.Services;
+using System.Windows;
 
 namespace StoreManagementSystem.ViewModels
 {
@@ -41,7 +41,6 @@ namespace StoreManagementSystem.ViewModels
                 ? Visibility.Collapsed
                 : Visibility.Visible;
 
-
         // =========================
         // KPI
         // =========================
@@ -51,11 +50,9 @@ namespace StoreManagementSystem.ViewModels
         public int ProductsCount
         {
             get => _productsCount;
-
             set
             {
                 _productsCount = value;
-
                 OnPropertyChanged();
             }
         }
@@ -65,11 +62,9 @@ namespace StoreManagementSystem.ViewModels
         public int LowStockCount
         {
             get => _lowStockCount;
-
             set
             {
                 _lowStockCount = value;
-
                 OnPropertyChanged();
             }
         }
@@ -79,11 +74,9 @@ namespace StoreManagementSystem.ViewModels
         public decimal TodaySales
         {
             get => _todaySales;
-
             set
             {
                 _todaySales = value;
-
                 OnPropertyChanged();
             }
         }
@@ -93,17 +86,14 @@ namespace StoreManagementSystem.ViewModels
         public decimal MonthlyRevenue
         {
             get => _monthlyRevenue;
-
             set
             {
                 _monthlyRevenue = value;
-
                 OnPropertyChanged();
             }
         }
 
-        public string GrowthRate =>
-            "Dynamic";
+        public string GrowthRate => "Dynamic";
 
         // =========================
         // CHARTS
@@ -113,31 +103,31 @@ namespace StoreManagementSystem.ViewModels
         {
             get;
             set;
-        }
+        } = new();
 
         public string[] SalesLabels
         {
             get;
             set;
-        }
+        } = Array.Empty<string>();
 
         public SeriesCollection TopProductsSeries
         {
             get;
             set;
-        }
+        } = new();
 
         public string[] TopProductsLabels
         {
             get;
             set;
-        }
+        } = Array.Empty<string>();
 
         public SeriesCollection InventorySeries
         {
             get;
             set;
-        }
+        } = new();
 
         // =========================
         // CONSTRUCTOR
@@ -151,19 +141,37 @@ namespace StoreManagementSystem.ViewModels
             _transactionRepository =
                 new TransactionRepository();
 
-            LoadDashboardData();
-
-            LoadCharts();
-
-            LoadWeeklySalesChartAsync();
-
-            LoadTopProductsChartAsync();
+            _ = InitializeDashboardAsync();
         }
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+
+        private async Task InitializeDashboardAsync()
+        {
+            try
+            {
+                await LoadDashboardDataAsync();
+
+                await LoadChartsAsync();
+
+                await LoadWeeklySalesChartAsync();
+
+                await LoadTopProductsChartAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Dashboard loading failed:\n{ex.Message}");
+            }
+        }
+
         // =========================
         // LOAD DASHBOARD DATA
         // =========================
 
-        private async void LoadDashboardData()
+        private async Task LoadDashboardDataAsync()
         {
             ProductsCount =
                 await _productRepository
@@ -186,7 +194,7 @@ namespace StoreManagementSystem.ViewModels
         // TOP PRODUCTS CHART
         // =========================
 
-        private async void LoadTopProductsChartAsync()
+        private async Task LoadTopProductsChartAsync()
         {
             var products =
                 await _transactionRepository
@@ -201,7 +209,6 @@ namespace StoreManagementSystem.ViewModels
                     new ColumnSeries
                     {
                         Title = "Sold",
-
                         Values =
                             new ChartValues<int>(
                                 products.Values)
@@ -219,7 +226,7 @@ namespace StoreManagementSystem.ViewModels
         // WEEKLY SALES CHART
         // =========================
 
-        private async void LoadWeeklySalesChartAsync()
+        private async Task LoadWeeklySalesChartAsync()
         {
             var sales =
                 await _transactionRepository
@@ -231,7 +238,6 @@ namespace StoreManagementSystem.ViewModels
                     new LineSeries
                     {
                         Title = "Sales",
-
                         Values =
                             new ChartValues<double>(
                                 sales)
@@ -258,14 +264,10 @@ namespace StoreManagementSystem.ViewModels
         }
 
         // =========================
-        // LOAD CHARTS
+        // INVENTORY CHART
         // =========================
 
-        // =========================
-        // LOAD CHARTS
-        // =========================
-
-        private async void LoadCharts()
+        private async Task LoadChartsAsync()
         {
             int inStock =
                 await _productRepository
@@ -282,44 +284,38 @@ namespace StoreManagementSystem.ViewModels
             InventorySeries =
                 new SeriesCollection
                 {
-            new PieSeries
-            {
-                Title = "In Stock",
-
-                Values =
-                    new ChartValues<int>
+                    new PieSeries
                     {
-                        inStock
+                        Title = "In Stock",
+                        Values =
+                            new ChartValues<int>
+                            {
+                                inStock
+                            },
+                        DataLabels = true
                     },
 
-                DataLabels = true
-            },
-
-            new PieSeries
-            {
-                Title = "Low Stock",
-
-                Values =
-                    new ChartValues<int>
+                    new PieSeries
                     {
-                        lowStock
+                        Title = "Low Stock",
+                        Values =
+                            new ChartValues<int>
+                            {
+                                lowStock
+                            },
+                        DataLabels = true
                     },
 
-                DataLabels = true
-            },
-
-            new PieSeries
-            {
-                Title = "Out Of Stock",
-
-                Values =
-                    new ChartValues<int>
+                    new PieSeries
                     {
-                        outOfStock
-                    },
-
-                DataLabels = true
-            }
+                        Title = "Out Of Stock",
+                        Values =
+                            new ChartValues<int>
+                            {
+                                outOfStock
+                            },
+                        DataLabels = true
+                    }
                 };
 
             OnPropertyChanged(

@@ -18,17 +18,15 @@ namespace StoreManagementSystem.ViewModels
         public UserControl? CurrentView
         {
             get => _currentView;
-
             set
             {
                 _currentView = value;
-
                 OnPropertyChanged();
             }
         }
 
         // =========================
-        // ROLE-BASED VISIBILITY
+        // ROLE BASED ACCESS
         // =========================
 
         public bool IsCashier =>
@@ -37,47 +35,29 @@ namespace StoreManagementSystem.ViewModels
 
         public Visibility InventoryVisibility =>
             IsCashier
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+                ? Visibility.Collapsed
+                : Visibility.Visible;
 
         public Visibility ProductsVisibility =>
             IsCashier
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+                ? Visibility.Collapsed
+                : Visibility.Visible;
 
         // =========================
         // COMMANDS
         // =========================
 
-        public ICommand OpenDashboardCommand
-        {
-            get;
-        }
+        public ICommand OpenDashboardCommand { get; }
 
-        public ICommand OpenInventoryCommand
-        {
-            get;
-        }
+        public ICommand OpenInventoryCommand { get; }
 
-        public ICommand OpenProductsCommand
-        {
-            get;
-        }
+        public ICommand OpenProductsCommand { get; }
 
-        public ICommand OpenPOSCommand
-        {
-            get;
-        }
+        public ICommand OpenPOSCommand { get; }
 
-        public ICommand OpenTransactionsCommand
-        {
-            get;
-        }
+        public ICommand OpenTransactionsCommand { get; }
 
-        public ICommand LogoutCommand
-        {
-            get;
-        }
+        public ICommand LogoutCommand { get; }
 
         // =========================
         // CONSTRUCTOR
@@ -86,92 +66,92 @@ namespace StoreManagementSystem.ViewModels
         public MainViewModel()
         {
             OpenDashboardCommand =
-                new RelayCommand(OpenDashboard);
+                new RelayCommand(_ => OpenDashboard());
 
             OpenInventoryCommand =
-                new RelayCommand(OpenInventory);
+                new RelayCommand(_ => OpenInventory());
 
             OpenProductsCommand =
-                new RelayCommand(OpenProducts);
+                new RelayCommand(_ => OpenProducts());
 
             OpenPOSCommand =
-                new RelayCommand(OpenPOS);
+                new RelayCommand(_ => OpenPOS());
 
             OpenTransactionsCommand =
-                new RelayCommand(OpenTransactions);
+                new RelayCommand(_ => OpenTransactions());
 
             LogoutCommand =
-                new RelayCommand(Logout);
+                new RelayCommand(_ => Logout());
 
             CurrentView =
                 new DashboardView();
         }
 
         // =========================
-        // DASHBOARD
+        // NAVIGATION METHODS
         // =========================
 
-        private void OpenDashboard(
-            object? parameter)
+        private void OpenDashboard()
         {
             CurrentView =
                 new DashboardView();
         }
 
-        // =========================
-        // INVENTORY
-        // =========================
-
-        private void OpenInventory(
-            object? parameter)
+        private void OpenInventory()
         {
             CurrentView =
                 new InventoryView();
         }
 
-        // =========================
-        // PRODUCTS
-        // =========================
-
-        private void OpenProducts(
-            object? parameter)
+        private void OpenProducts()
         {
             CurrentView =
                 new ProductsView();
         }
 
-        // =========================
-        // POS
-        // =========================
-
-        private void OpenPOS(
-            object? parameter)
+        private void OpenPOS()
         {
             CurrentView =
                 new POSView();
         }
 
-        // =========================
-        // TRANSACTIONS
-        // =========================
-
-        private void OpenTransactions(
-            object? parameter)
+        private void OpenTransactions()
         {
-            TransactionHistoryWindow
-                transactionWindow =
-                    new TransactionHistoryWindow();
+            try
+            {
+                TransactionHistoryWindow
+                    transactionWindow =
+                        new TransactionHistoryWindow();
 
-            transactionWindow.ShowDialog();
+                transactionWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Unable to open transaction history.\n\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         // =========================
         // LOGOUT
         // =========================
 
-        private void Logout(
-            object? parameter)
+        private void Logout()
         {
+            bool result =
+                MessageBox.Show(
+                    "Are you sure you want to logout?",
+                    "Logout",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question)
+                == MessageBoxResult.Yes;
+
+            if (!result)
+                return;
+
             CurrentUserService.CurrentUser =
                 null;
 
@@ -180,16 +160,12 @@ namespace StoreManagementSystem.ViewModels
 
             loginWindow.Show();
 
-            foreach (Window window
-                in Application.Current.Windows)
-            {
-                if (window is MainWindow)
-                {
-                    window.Close();
+            Window? mainWindow =
+                Application.Current.Windows
+                .OfType<MainWindow>()
+                .FirstOrDefault();
 
-                    break;
-                }
-            }
+            mainWindow?.Close();
         }
     }
 }

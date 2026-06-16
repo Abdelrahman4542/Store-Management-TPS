@@ -47,8 +47,8 @@ namespace StoreManagementSystem.Repositories
                     StockQuantity =
                         (int)reader["StockQuantity"],
 
-                    Category =
-                        reader["Category"].ToString()!
+                    LowStockThreshold =
+                        (int)reader["LowStockThreshold"]
                 });
             }
 
@@ -67,10 +67,10 @@ namespace StoreManagementSystem.Repositories
             string query =
                 @"INSERT INTO Products
                   (Name, SKU, Price,
-                   StockQuantity, Category)
+                   StockQuantity, LowStockThreshold)
                   VALUES
                   (@Name, @SKU, @Price,
-                   @StockQuantity, @Category)";
+                   @StockQuantity, @LowStockThreshold)";
 
             SqlCommand command =
                 new SqlCommand(query, connection);
@@ -90,10 +90,9 @@ namespace StoreManagementSystem.Repositories
             command.Parameters.AddWithValue(
                 "@StockQuantity",
                 product.StockQuantity);
-
             command.Parameters.AddWithValue(
-                "@Category",
-                product.Category);
+                "@LowStockThreshold",
+                product.LowStockThreshold);
 
             await command.ExecuteNonQueryAsync();
         }
@@ -113,7 +112,7 @@ namespace StoreManagementSystem.Repositories
                       SKU = @SKU,
                       Price = @Price,
                       StockQuantity = @StockQuantity,
-                      Category = @Category
+                      LowStockThreshold = @LowStockThreshold
                   WHERE ProductId = @Id";
 
             SqlCommand command =
@@ -140,8 +139,8 @@ namespace StoreManagementSystem.Repositories
                 product.StockQuantity);
 
             command.Parameters.AddWithValue(
-                "@Category",
-                product.Category);
+                "@LowStockThreshold",
+                product.LowStockThreshold);
 
             await command.ExecuteNonQueryAsync();
         }
@@ -232,7 +231,7 @@ namespace StoreManagementSystem.Repositories
             string query =
                 @"SELECT COUNT(*)
           FROM Products
-          WHERE StockQuantity <= 5
+          WHERE StockQuantity <= LowStockThreshold
           AND IsActive = 1";
 
             SqlCommand command =

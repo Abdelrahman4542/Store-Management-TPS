@@ -39,7 +39,6 @@ CREATE TABLE Products
 
     LowStockThreshold INT DEFAULT 5,
 
-    Category NVARCHAR(50),
 
     IsActive BIT DEFAULT 1,
 

@@ -21,8 +21,6 @@ namespace StoreManagementSystem.Repositories
 
             try
             {
-                // ================= INSERT TRANSACTION =================
-
                 string transactionQuery =
                     @"INSERT INTO Transactions
                     (UserId, TransactionDate,
@@ -68,8 +66,6 @@ namespace StoreManagementSystem.Repositories
                     (int)await transactionCommand
                     .ExecuteScalarAsync();
 
-                // ================= INSERT ITEMS =================
-
                 foreach (var item in transaction.Items)
                 {
                     string itemQuery =
@@ -110,6 +106,34 @@ namespace StoreManagementSystem.Repositories
 
                     await itemCommand.ExecuteNonQueryAsync();
 
+                    // ================= CHECK STOCK =================
+
+                    string checkStockQuery =
+                        @"SELECT StockQuantity
+                          FROM Products
+                          WHERE ProductId = @ProductId";
+
+                    SqlCommand checkStockCommand =
+                        new SqlCommand(
+                            checkStockQuery,
+                            connection,
+                            sqlTransaction);
+
+                    checkStockCommand.Parameters.AddWithValue(
+                        "@ProductId",
+                        item.ProductId);
+
+                    int currentStock =
+                        Convert.ToInt32(
+                            await checkStockCommand
+                            .ExecuteScalarAsync());
+
+                    if (currentStock < item.Quantity)
+                    {
+                        throw new Exception(
+                            $"Insufficient stock for product ID {item.ProductId}");
+                    }
+
                     // ================= UPDATE STOCK =================
 
                     string stockQuery =
@@ -142,7 +166,6 @@ namespace StoreManagementSystem.Repositories
             catch
             {
                 await sqlTransaction.RollbackAsync();
-
                 throw;
             }
         }
@@ -246,6 +269,7 @@ namespace StoreManagementSystem.Repositories
 
             return items;
         }
+
         // ================= TODAY SALES =================
 
         public async Task<decimal> GetTodaySalesAsync()
@@ -256,11 +280,10 @@ namespace StoreManagementSystem.Repositories
             await connection.OpenAsync();
 
             string query =
-                @"SELECT ISNULL(
-            SUM(FinalTotal),0)
-          FROM Transactions
-          WHERE CAST(TransactionDate AS DATE)
-          = CAST(GETDATE() AS DATE)";
+                @"SELECT ISNULL(SUM(FinalTotal),0)
+                  FROM Transactions
+                  WHERE CAST(TransactionDate AS DATE)
+                  = CAST(GETDATE() AS DATE)";
 
             SqlCommand command =
                 new SqlCommand(query, connection);
@@ -279,13 +302,10 @@ namespace StoreManagementSystem.Repositories
             await connection.OpenAsync();
 
             string query =
-                @"SELECT ISNULL(
-            SUM(FinalTotal),0)
-          FROM Transactions
-          WHERE MONTH(TransactionDate)
-          = MONTH(GETDATE())
-          AND YEAR(TransactionDate)
-          = YEAR(GETDATE())";
+                @"SELECT ISNULL(SUM(FinalTotal),0)
+                  FROM Transactions
+                  WHERE MONTH(TransactionDate)=MONTH(GETDATE())
+                  AND YEAR(TransactionDate)=YEAR(GETDATE())";
 
             SqlCommand command =
                 new SqlCommand(query, connection);
@@ -293,6 +313,7 @@ namespace StoreManagementSystem.Repositories
             return Convert.ToDecimal(
                 await command.ExecuteScalarAsync());
         }
+
         // ================= TOP SELLING PRODUCTS =================
 
         public async Task<Dictionary<string, int>>
@@ -307,13 +328,13 @@ namespace StoreManagementSystem.Repositories
 
             string query =
                 @"SELECT TOP 10
-            p.Name,
-            SUM(ti.Quantity) AS TotalSold
-          FROM TransactionItems ti
-          INNER JOIN Products p
-          ON ti.ProductId = p.ProductId
-          GROUP BY p.Name
-          ORDER BY TotalSold DESC";
+                    p.Name,
+                    SUM(ti.Quantity) AS TotalSold
+                  FROM TransactionItems ti
+                  INNER JOIN Products p
+                  ON ti.ProductId = p.ProductId
+                  GROUP BY p.Name
+                  ORDER BY TotalSold DESC";
 
             SqlCommand command =
                 new SqlCommand(query, connection);
@@ -331,6 +352,7 @@ namespace StoreManagementSystem.Repositories
 
             return products;
         }
+
         // ================= WEEKLY SALES =================
 
         public async Task<List<double>>
@@ -350,10 +372,10 @@ namespace StoreManagementSystem.Repositories
 
                 string query =
                     @"SELECT ISNULL(
-                SUM(FinalTotal),0)
-              FROM Transactions
-              WHERE CAST(TransactionDate AS DATE)
-              = @Date";
+                        SUM(FinalTotal),0)
+                      FROM Transactions
+                      WHERE CAST(TransactionDate AS DATE)
+                      = @Date";
 
                 SqlCommand command =
                     new SqlCommand(query, connection);
@@ -371,6 +393,5 @@ namespace StoreManagementSystem.Repositories
 
             return sales;
         }
-
     }
 }

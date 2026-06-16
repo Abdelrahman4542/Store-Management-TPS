@@ -1,6 +1,6 @@
 ﻿using StoreManagementSystem.Models;
 
-namespace StoreManagementSystem.ViewModels
+namespace StoreManagementSystem.ViewModels.Transactions
 {
     public class TransactionDetailsViewModel
         : BaseViewModel

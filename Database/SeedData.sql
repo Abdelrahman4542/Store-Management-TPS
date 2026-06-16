@@ -16,10 +16,10 @@ VALUES
 -- ================= DEFAULT PRODUCTS =================
 
 INSERT INTO Products
-(Name, SKU, Price, StockQuantity, Category)
+(Name, SKU, Price, StockQuantity)
 VALUES
-('Coffee', 'CF001', 50, 100, 'Drinks'),
+('Coffee', 'CF001', 50, 100 ),
 
-('Tea', 'TE001', 30, 70, 'Drinks'),
+('Tea', 'TE001', 30, 70),
 
-('Burger', 'BG001', 120, 40, 'Food');
+('Burger', 'BG001', 120, 40');

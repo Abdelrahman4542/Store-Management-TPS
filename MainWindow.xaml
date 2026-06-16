@@ -6,119 +6,199 @@
         xmlns:viewModels="clr-namespace:StoreManagementSystem.ViewModels"
         mc:Ignorable="d"
         Title="Store Management System"
-    
-        Background="#EEF2F7">
+        WindowState="Maximized"
+        Background="#F8FAFC">
 
     <Window.DataContext>
-
         <viewModels:MainViewModel/>
-
     </Window.DataContext>
+
+    <Window.Resources>
+
+        <Style TargetType="Button">
+
+            <Setter Property="Height"
+                    Value="45"/>
+
+            <Setter Property="Padding"
+                    Value="20,0"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+
+            <Setter Property="Foreground"
+                    Value="#334155"/>
+
+            <Setter Property="Background"
+                    Value="Transparent"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Style.Triggers>
+
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+
+                    <Setter Property="Background"
+                            Value="#E2E8F0"/>
+
+                </Trigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+    </Window.Resources>
 
     <Grid>
 
-        <Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
 
-            <ColumnDefinition Width="240"/>
+            <RowDefinition Height="85"/>
 
-            <ColumnDefinition Width="*"/>
+            <RowDefinition Height="*"/>
 
-        </Grid.ColumnDefinitions>
+        </Grid.RowDefinitions>
 
-        <!-- ================= SIDEBAR ================= -->
+        <!-- ================= TOP NAVBAR ================= -->
 
-        <Border Background="#0F172A" >
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#E2E8F0"
+                BorderThickness="0,0,0,1">
 
-            <StackPanel>
+            <Grid Margin="25,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
 
                 <!-- LOGO -->
 
-                <Border Height="80"
-                        Background="#111827">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
 
-                    <Grid>
+                    <Border Width="50"
+                            Height="50"
+                            CornerRadius="25"
+                            Background="#2563EB">
+
+                        <TextBlock Text="S"
+                                   Foreground="White"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <StackPanel Margin="12,0,0,0">
 
                         <TextBlock Text="SM-TPS"
-                                   Foreground="White"
-                                   FontSize="28"
+                                   FontSize="22"
                                    FontWeight="Bold"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+                                   Foreground="#0F172A"/>
 
-                    </Grid>
+                        <TextBlock Text="Store Management System"
+                                   FontSize="12"
+                                   Foreground="#64748B"/>
 
-                </Border>
+                    </StackPanel>
 
-                <!-- MENU -->
+                </StackPanel>
 
-                <StackPanel Margin="10 20 10 10">
+                <!-- NAVIGATION -->
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
 
                     <Button Content="Dashboard"
-                            Height="45"
-                            Margin="0 0 0 10"
-                            Background="#374151"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
+                            Margin="5"
                             Command="{Binding OpenDashboardCommand}"/>
 
                     <Button Content="Inventory"
-                            Height="45"
-                            Margin="0 0 0 10"
-                            Background="#374151"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
+                            Margin="5"
                             Visibility="{Binding InventoryVisibility}"
                             Command="{Binding OpenInventoryCommand}"/>
 
                     <Button Content="Products"
-                            Height="45"
-                            Margin="0 0 0 10"
-                            Background="#374151"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
+                            Margin="5"
                             Visibility="{Binding ProductsVisibility}"
                             Command="{Binding OpenProductsCommand}"/>
 
                     <Button Content="POS Terminal"
-                            Height="45"
-                            Margin="0 0 0 10"
-                            Background="#374151"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
+                            Margin="5"
                             Command="{Binding OpenPOSCommand}"/>
 
                     <Button Content="Transactions"
-                            Height="45"
-                            Margin="0 0 0 10"
-                            Background="#374151"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
+                            Margin="5"
                             Command="{Binding OpenTransactionsCommand}"/>
-
-                    <Button Content="Logout"
-                            Height="45"
-                            Margin="0 40 0 0"
-                            Background="#DC2626"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold"
-                            Command="{Binding LogoutCommand}"/>
 
                 </StackPanel>
 
-            </StackPanel>
+                <!-- LOGOUT -->
+
+                <Button Grid.Column="2"
+                        Content="Logout"
+                        Width="120"
+                        Height="45"
+                        Background="#DC2626"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Command="{Binding LogoutCommand}"/>
+
+            </Grid>
 
         </Border>
 
         <!-- ================= CONTENT ================= -->
 
-        <ContentControl Grid.Column="1"
-                        Content="{Binding CurrentView}"/>
+        <Grid Grid.Row="1">
+
+            <Border Margin="20"
+                    Background="White"
+                    CornerRadius="20">
+
+                <ContentControl Content="{Binding CurrentView}"/>
+
+            </Border>
+
+        </Grid>
 
     </Grid>
 

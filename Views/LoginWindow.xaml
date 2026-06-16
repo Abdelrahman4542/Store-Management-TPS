@@ -4,82 +4,94 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:StoreManagementSystem.ViewModels"
+        xmlns:helpers="clr-namespace:StoreManagementSystem.Helpers"
         mc:Ignorable="d"
         Title="Store Management System"
-      
-       
-        Background="#EEF2F7">
-
-    <!-- ================= DATACONTEXT ================= -->
+     
+        Background="#F5F7FA">
 
     <Window.DataContext>
-
         <viewModels:LoginViewModel/>
-
     </Window.DataContext>
-
-    <!-- ================= UI ================= -->
 
     <Grid>
 
-        <Border Width="500"
-                Padding="30"
-                CornerRadius="18"
+        <Border Width="450"
+                Padding="35"
                 Background="White"
+                CornerRadius="20"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
 
+            <Border.Effect>
+
+                <DropShadowEffect BlurRadius="20"
+                                  ShadowDepth="2"
+                                  Opacity="0.15"/>
+
+            </Border.Effect>
+
             <StackPanel>
 
-                <!-- TITLE -->
-
-                <TextBlock Text="Store Management System"
-                           FontSize="28"
+                <TextBlock Text="Welcome Back"
+                           FontSize="34"
                            FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           Margin="0 0 0 10"/>
+                           HorizontalAlignment="Center"/>
 
-                <TextBlock Text="Login to continue"
+                <TextBlock Text="Login to access the system"
                            Foreground="Gray"
+                           FontSize="14"
                            HorizontalAlignment="Center"
-                           Margin="0 0 0 30"/>
+                           Margin="0 8 0 35"/>
 
-                <!-- USERNAME -->
+                <!-- Username -->
 
                 <TextBlock Text="Username"
                            FontWeight="SemiBold"
-                           Margin="0 0 0 5"/>
+                           Margin="0 0 0 8"/>
 
-                <TextBox Height="40"
-                         FontSize="14"
-                         Padding="10"
+                <TextBox Height="45"
+                         FontSize="15"
+                         Padding="12"
                          Margin="0 0 0 20"
+                         Background="#F8FAFC"
+                         BorderBrush="#D1D5DB"
                          Text="{Binding Username,
-                         UpdateSourceTrigger=PropertyChanged}"/>
+                         UpdateSourceTrigger=PropertyChanged}" />
 
-                <!-- PASSWORD -->
+                <!-- Password -->
 
                 <TextBlock Text="Password"
                            FontWeight="SemiBold"
-                           Margin="0 0 0 5"/>
+                           Margin="0 0 0 8"/>
 
-                <PasswordBox x:Name="PasswordBox"
-                             Height="40"
-                             FontSize="14"
-                             Padding="10"
+                <PasswordBox Height="45"
+                             FontSize="15"
+                             Padding="12"
                              Margin="0 0 0 30"
-                             PasswordChanged="PasswordBox_PasswordChanged"/>
+                             Background="#F8FAFC"
+                             BorderBrush="#D1D5DB"
+                             helpers:PasswordBoxHelper.BindPassword="True"
+                             helpers:PasswordBoxHelper.BoundPassword="{Binding Password,
+                             Mode=TwoWay,
+                             UpdateSourceTrigger=PropertyChanged}" />
 
-                <!-- LOGIN BUTTON -->
+                <!-- Login -->
 
-                <Button Content="Login"
-                        Height="45"
-                        FontSize="16"
+                <Button Content="LOGIN"
+                        Height="50"
+                        FontSize="15"
                         FontWeight="Bold"
                         Background="#2563EB"
                         Foreground="White"
                         BorderThickness="0"
-                        Command="{Binding LoginCommand}"/>
+                        Command="{Binding LoginCommand}" />
+
+                <TextBlock Text="Store Management &amp; TPS"
+                           Foreground="#9CA3AF"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Margin="0 25 0 0"/>
 
             </StackPanel>
 

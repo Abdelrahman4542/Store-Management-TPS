@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using StoreManagementSystem.ViewModels;
 
 namespace StoreManagementSystem.Views
 {
@@ -8,18 +7,6 @@ namespace StoreManagementSystem.Views
         public LoginWindow()
         {
             InitializeComponent();
-        }
-
-        private void PasswordBox_PasswordChanged(
-            object sender,
-            RoutedEventArgs e)
-        {
-            if (DataContext is LoginViewModel
-                viewModel)
-            {
-                viewModel.Password =
-                    PasswordBox.Password;
-            }
         }
     }
 }

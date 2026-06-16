@@ -12,6 +12,12 @@ namespace StoreManagementSystem.Repositories
             string username,
             string password)
         {
+            if (string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                return null;
+            }
+
             using SqlConnection connection =
                 DbConnection.GetConnection();
 
@@ -24,45 +30,45 @@ namespace StoreManagementSystem.Repositories
                   AND PasswordHash = @Password
                   AND IsActive = 1";
 
-            SqlCommand command =
+            using SqlCommand command =
                 new SqlCommand(query, connection);
 
             command.Parameters.AddWithValue(
                 "@Username",
-                username);
+                username.Trim());
 
             command.Parameters.AddWithValue(
                 "@Password",
                 password);
 
-            SqlDataReader reader =
+            using SqlDataReader reader =
                 await command.ExecuteReaderAsync();
 
-            if (await reader.ReadAsync())
+            if (!await reader.ReadAsync())
             {
-                return new User
-                {
-                    UserId =
-                        (int)reader["UserId"],
-
-                    Username =
-                        reader["Username"].ToString()!,
-
-                    PasswordHash =
-                        reader["PasswordHash"].ToString()!,
-
-                    FullName =
-                        reader["FullName"].ToString()!,
-
-                    Role =
-                        reader["Role"].ToString()!,
-
-                    IsActive =
-                        (bool)reader["IsActive"]
-                };
+                return null;
             }
 
-            return null;
+            return new User
+            {
+                UserId =
+                    (int)reader["UserId"],
+
+                Username =
+                    reader["Username"].ToString()!,
+
+                PasswordHash =
+                    reader["PasswordHash"].ToString()!,
+
+                FullName =
+                    reader["FullName"].ToString()!,
+
+                Role =
+                    reader["Role"].ToString()!,
+
+                IsActive =
+                    (bool)reader["IsActive"]
+            };
         }
     }
 }

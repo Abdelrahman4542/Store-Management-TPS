@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using StoreManagementSystem.ViewModels;
 
 namespace StoreManagementSystem.Views
 {
@@ -8,9 +7,6 @@ namespace StoreManagementSystem.Views
         public DashboardView()
         {
             InitializeComponent();
-
-            DataContext =
-                new DashboardViewModel();
         }
     }
 }
